@@ -1,0 +1,16 @@
+setup.py
+tethysapp/__init__.py
+tethysapp/analytics/__init__.py
+tethysapp/analytics/api.py
+tethysapp/analytics/app.py
+tethysapp/analytics/controllers.py
+tethysapp/analytics/handoff.py
+tethysapp/analytics/model.py
+tethysapp/analytics/tests/__init__.py
+tethysapp/analytics/tests/tests.py
+tethysapp_analytics.egg-info/PKG-INFO
+tethysapp_analytics.egg-info/SOURCES.txt
+tethysapp_analytics.egg-info/dependency_links.txt
+tethysapp_analytics.egg-info/namespace_packages.txt
+tethysapp_analytics.egg-info/not-zip-safe
+tethysapp_analytics.egg-info/top_level.txt

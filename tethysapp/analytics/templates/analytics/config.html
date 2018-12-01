@@ -1,0 +1,87 @@
+{% extends "analytics/base.html" %}
+
+
+
+{% block app_content %}
+  <h1>Configuration Instructions</h1>
+
+  <h2>Setup a Google Analytics for your portal</h2>
+  <p>instructions for setting up a GA account should go here.</p>
+
+  <h2>Configuring the Portal</h2>
+  <p>Tethys Portals can be configured to track app usage of configured apps using the Django-Analytical python package.
+    <ul>
+      <li><a target="_blank" href="https://django-analytical.readthedocs.io/en/latest">Read the Documentation on ReadTheDocs</a> </li>
+      <li><a target="_blank" href="https://github.com/jazzband/django-analytical">View the source code on GitHub</a> </li>
+    </ul>
+  </p>
+  <ol>
+    <li>Install Django-Analytical</li>
+      <ul>
+        <li>Open the command line for the server</li>
+        <li>Enter the tethys python environment with the shortcut alias 't'</li>
+        <li>conda install django-analytical</li>
+      </ul>
+    <li>Configure the portal's settings.py file</li>
+      <ul>
+        <li>The settings.py file is found in .../tethys/src/tethys_portal/settings.py</li>
+        <li>Find the INSTALLED_APPS = () tuple (should contain about a dozen package names)</li>
+        <li>Above that tuple, add GOOGLE_ANALYTICS_JS_PROPERTY_ID = 'UA-12345678-9' replacing the ID with the one generated for you by Google</li>
+        <li>Add 'analytical' as the last element of the INSTALLED_APPS tuple</li>
+      </ul>
+  </ol>
+
+
+  <h2>Configuring an App</h2>
+  <p>To make an app trackable using the portal's configuration, you need to create a new html file, modify app.py, and modify base.py.</p>
+  <ol>
+    <li>Create a new html document</li>
+      <ul>
+        <li>
+          <p>Create a new, blank html document, called analytics.html, in the templates folder of the app. Do not add anything to this document.</p>
+        </li>
+      </ul>
+    <li>App.py</li>
+      <ul>
+        <li>
+          <p>Add an import statement: from django.core.management import settings</p>
+          <p>This imports the settings.py file of the tethys portal where you added the analytical python package
+            to the list of installed apps and listed the tracking ID.</p>
+        </li>
+        <li>
+          <p>Add the following 4 lines of code. Put it in the class and beneath the declaration of name, color, etc.</p>
+          <p>
+            app_file_path = os.path.dirname(__file__)<br>
+            with open(os.path.join(app_file_path, 'templates/[name of your app package]/analytics.html'), 'w') as file:<br>
+            if 'analytical' in settings.INSTALLED_APPS:<br>
+            file.write("{% load google_analytics_js %}{% google_analytics_js %}")<br>
+          </p>
+        </li>
+        <li>
+          <p>
+            This code gets the file path of app.py. Then it uses that to open the analytics.html file you created.
+            make sure you appropriately edit the arguments in os.path.join() to get the correct file path of the
+            template. When the code opens this document, all the contents of the file are erased. Next it checks if
+            the analytical package is installed to the portal. If it is, it adds the django tags to the html file.
+          </p>
+        </li>
+      </ul>
+    <li>Modify base.html</li>
+      <ul>
+        <li>
+          <p>Open base.html</p>
+        </li>
+        <li>
+          <p>Under the "block scripts" tag, add include "[name of your app package]/analytics.html"</p>
+        </li>
+        <li>
+          <p>
+            The include tag lets you use the entire contents of the analytics.html file where you wrote the tag. This
+            will either be a blank document, having no effect, or a document containing the tags to implement Google
+            Analytics.
+          </p>
+        </li>
+      </ul>
+  </ol>
+
+{% endblock %}

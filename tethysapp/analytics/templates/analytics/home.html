@@ -1,13 +1,12 @@
 {% extends "analytics/base.html" %}
 {% load tethys_gizmos %}
 
-{% block header_buttons %}
-  <div class="header-button glyphicon-button" data-toggle="tooltip" data-placement="bottom" title="Help">
-    <a data-toggle="modal" data-target="#help-modal"><span class="glyphicon glyphicon-question-sign"></span></a>
-  </div>
-{% endblock %}
-
 {% block app_content %}
+<div id="apps">
+    <ul>Apps installed on this tethys portal</ul>
+</div>
+
+<div id="stats"></div>
 {% endblock %}
 
 {% block app_actions %}

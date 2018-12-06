@@ -1,6 +1,4 @@
-import pprint, ast
-from resources import app_configuration
-from django.http import JsonResponse
+import pprint, os
 from apiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
 
@@ -28,13 +26,12 @@ def get_report(analytics, viewID, metrics, dimensions):
             }
         ).execute()
 
-    pprint.pprint(reports)
+    # pprint.pprint(reports)
     return reports
 
 
 def print_results(response):
     """Parses and prints the Analytics Reporting API V4 response.
-
     Args:
       response: An Analytics Reporting API V4 response.
     """
@@ -57,14 +54,14 @@ def print_results(response):
                 for metricHeader, value in zip(metricHeaders, values.get('values')):
                     results[metricHeader.get('name')] = value
 
-    print(results)
+    # print(results)
     return results
 
 
 def sortMetricDimension(selections):
-    pprint.pprint(selections)
+    # pprint.pprint(selections)
     metric_list = ['ga:sessions', 'ga:users', 'ga:avgSessionDuration']
-    dimension_list = ['ga:country', 'ga:city', 'ga:browser']
+    dimension_list = ['ga:country', 'ga:city', 'ga:browser', 'ga:pagePath']
     metrics = []
     dimensions = []
     for selection in selections:
@@ -82,19 +79,24 @@ def sortMetricDimension(selections):
 
     return sorted
 
-def GAstats(request):
-    selections = ast.literal_eval(request.body)['selections']
+def GAstats(selections):
+    """
+    selections: a list in the form ['name of metric 1', 'name of metric 2', ... ] containing all the metrics and
+                dimensions to be queried. Metrics and Dimensions will be appropriately sorted.
+    """
+    # Sort the user provided information
     selections = sortMetricDimension(selections)
     metrics = selections['metrics']
     dimensions = selections['dimensions']
-
-    app_config = app_configuration()
+    # set the environment for getting data from google analytics
     scopes = ['https://www.googleapis.com/auth/analytics.readonly']
-    key_location = app_config['app_wksp_path'] + 'api_info.json'
-    viewID = app_config['viewID']
-
+    key_location = os.path.join(os.path.dirname(__file__), 'workspaces/app_workspace/api_info.json')
+    viewID = '184880283'
+    # make the queries and print the results
     analytics = init_analytics(key_location, scopes)
     response = get_report(analytics, viewID, metrics, dimensions)
     results = print_results(response)
 
-    return JsonResponse(results)
+    # pprint.pprint(results)
+
+    return results

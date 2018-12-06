@@ -10,13 +10,13 @@ app_class = 'analytics.app:Analytics'
 app_package_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tethysapp', app_package)
 
 ### Python Dependencies ###
-dependencies = ['apiclient', 'oauth2client', 'pprint', 'ast']
+dependencies = ['google-api-python-client', 'apiclient', 'oauth2client', 'pprint', 'ast']
 
 setup(
     name=release_package,
     version='0.0.1',
     tags='',
-    description='Viewusage statistics as tracked by Google Analytics forconfigured apps on this portal',
+    description='View usage statistics as tracked by Google Analytics for configured apps on this portal',
     long_description='',
     keywords='',
     author='Riley Hales',

@@ -2,6 +2,7 @@ from tethys_sdk.base import TethysAppBase, url_map_maker
 from django.core.management import settings
 import os
 
+
 class Analytics(TethysAppBase):
     """
     Tethys app class for Portal Analytics Viewer.
@@ -18,8 +19,9 @@ class Analytics(TethysAppBase):
     enable_feedback = False
     feedback_emails = []
 
-    workingdir = os.path.dirname(__file__)
-    with open(os.path.join(workingdir, 'templates/analytics/analytics.html'), 'w') as file:
+    # This is the code that checks to see if django analytics is installed. If it is it adds the tags to implement it
+    my_directory = os.path.dirname(__file__)
+    with open(os.path.join(my_directory, 'templates/analytics/analytics.html'), 'w') as file:
         if 'analytical' in settings.INSTALLED_APPS:
             file.write("{% load google_analytics_js %}{% google_analytics_js %}")
 
@@ -30,6 +32,7 @@ class Analytics(TethysAppBase):
         UrlMap = url_map_maker(self.root_url)
 
         url_maps = (
+            # VIEWABLE PAGES
             UrlMap(
                 name='home',
                 url='analytics',
@@ -39,6 +42,23 @@ class Analytics(TethysAppBase):
                 name='config',
                 url='analytics/config',
                 controller='analytics.controllers.config',
+            ),
+            UrlMap(                             # this is the controller for the page that shows app specific stats
+                name='template',                # {name} is an argument the controller needs to accept second
+                url='analytics/stats/{name}',
+                controller='analytics.controllers.app_template'
+            ),
+
+            # AJAX CONTROLLERS
+            UrlMap(
+                name='get_app_list',
+                url='analytics/ajax/get_applist',
+                controller='analytics.ajaxhandlers.get_applist',
+            ),
+            UrlMap(
+                name='stats',
+                url='analytics/ajax/stats',
+                controller='analytics.ajaxhandlers.analytics',
             ),
         )
 

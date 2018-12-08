@@ -13,17 +13,11 @@ class Analytics(TethysAppBase):
     icon = 'analytics/images/analytics_icon.png'
     package = 'analytics'
     root_url = 'analytics'
-    color = '#d4af37'
+    color = '#8b0000'
     description = 'View usage statistics as tracked by Google Analytics for configured apps on this portal'
     tags = ''
     enable_feedback = False
     feedback_emails = []
-
-    # This is the code that checks to see if django analytics is installed. If it is it adds the tags to implement it
-    my_directory = os.path.dirname(__file__)
-    with open(os.path.join(my_directory, 'templates/analytics/analytics.html'), 'w') as file:
-        if 'analytical' in settings.INSTALLED_APPS:
-            file.write("{% load google_analytics_js %}{% google_analytics_js %}")
 
     def url_maps(self):
         """
@@ -63,3 +57,18 @@ class Analytics(TethysAppBase):
         )
 
         return url_maps
+
+    def init_portal_parameters(self):
+        # This is the code that checks to see if django analytics is installed. If it is it adds the tags to implement it
+        print('getting portal analytical configuration status')
+        my_directory = os.path.dirname(__file__)
+        with open(os.path.join(my_directory, 'templates/analytics/analytics.html'), 'w') as file:
+            if 'analytical' in settings.INSTALLED_APPS:
+                file.write("{% load google_analytics_js %}{% google_analytics_js %}")
+
+        # Make the json lat/lon points object that gets mapped on the main page of the app
+        print('generating a user locations json file')
+        from model import user_points_json
+        user_points_json()
+
+        return

@@ -1,4 +1,4 @@
-import pprint, os
+import os
 from apiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
 
@@ -61,7 +61,7 @@ def print_results(response):
 def sortMetricDimension(selections):
     # pprint.pprint(selections)
     metric_list = ['ga:sessions', 'ga:users', 'ga:avgSessionDuration']
-    dimension_list = ['ga:country', 'ga:city', 'ga:browser', 'ga:pagePath']
+    dimension_list = ['ga:country', 'ga:city', 'ga:browser', 'ga:pagePath', 'ga:latitude', 'ga:longitude']
     metrics = []
     dimensions = []
     for selection in selections:
@@ -91,12 +91,13 @@ def GAstats(selections):
     # set the environment for getting data from google analytics
     scopes = ['https://www.googleapis.com/auth/analytics.readonly']
     key_location = os.path.join(os.path.dirname(__file__), 'workspaces/app_workspace/api_info.json')
-    viewID = '184880283'
+    # viewID = '184880283'
+    viewID = '184214759'
+    # viewID = '185555963'
     # make the queries and print the results
     analytics = init_analytics(key_location, scopes)
     response = get_report(analytics, viewID, metrics, dimensions)
     results = print_results(response)
-
-    # pprint.pprint(results)
+    print results
 
     return results

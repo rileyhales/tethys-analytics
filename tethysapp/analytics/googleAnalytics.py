@@ -4,6 +4,19 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 """Hello Analytics Reporting API V4."""
 
+"""
+To make an API call, you need to
+1. Call GAstats and provide a list of the metrics and dimensions you want to query. GAstats does the following:
+    1. uses sortMetricDimension to appropriately filter them to make a correctly formated request
+    2. call init analytics to get an analytics response object
+    3. call get_report to actually get the information from GA
+    4. returns the raw/unfiltered report of information from google
+2. Filter the response information to get the parts you're interested in.
+3. Use/display the data in your code
+"""
+
+######## THE NEXT 4 FUNCTIONS ARE USED TO MAKE A GENERAL QUERY OF THE GOOGLE ANALYTICS API ########
+
 def init_analytics(key_location, scopes):
     credentials = ServiceAccountCredentials.from_json_keyfile_name(
         key_location, scopes)
@@ -25,43 +38,28 @@ def get_report(analytics, viewID, metrics, dimensions):
                 }]
             }
         ).execute()
-
-    # pprint.pprint(reports)
     return reports
-
-
-def print_results(response):
-    """Parses and prints the Analytics Reporting API V4 response.
-    Args:
-      response: An Analytics Reporting API V4 response.
-    """
-    results = {}
-
-    for report in response.get('reports', []):
-        columnHeader = report.get('columnHeader', {})
-        dimensionHeaders = columnHeader.get('dimensions', [])
-        metricHeaders = columnHeader.get('metricHeader', {}).get('metricHeaderEntries', [])
-
-        for row in report.get('data', {}).get('rows', []):
-            dimensions = row.get('dimensions', [])
-            dateRangeValues = row.get('metrics', [])
-
-            for header, dimension in zip(dimensionHeaders, dimensions):
-                results[header] = dimension
-
-            for i, values in enumerate(dateRangeValues):
-                # results['Date range' + str(i)] = str(i)
-                for metricHeader, value in zip(metricHeaders, values.get('values')):
-                    results[metricHeader.get('name')] = value
-
-    # print(results)
-    return results
 
 
 def sortMetricDimension(selections):
     # pprint.pprint(selections)
-    metric_list = ['ga:sessions', 'ga:users', 'ga:avgSessionDuration']
-    dimension_list = ['ga:country', 'ga:city', 'ga:browser', 'ga:pagePath', 'ga:latitude', 'ga:longitude']
+    metric_list = [
+        'ga:sessions',
+        'ga:users',
+        'ga:avgSessionDuration',
+    ]
+    dimension_list = [
+        'ga:country',
+        'ga:city',
+        'ga:browser',
+        'ga:pagePath',
+        'ga:latitude',
+        'ga:longitude',
+        'ga:continent',
+        'ga:city',
+        'ga:cityId',
+        'ga:countryIsoCode',
+    ]
     metrics = []
     dimensions = []
     for selection in selections:
@@ -91,13 +89,39 @@ def GAstats(selections):
     # set the environment for getting data from google analytics
     scopes = ['https://www.googleapis.com/auth/analytics.readonly']
     key_location = os.path.join(os.path.dirname(__file__), 'workspaces/app_workspace/api_info.json')
-    # viewID = '184880283'
-    viewID = '184214759'
-    # viewID = '185555963'
+    viewID = '184214759'    # my accounts
+    viewID = '185555963'    # the worldwater account
     # make the queries and print the results
     analytics = init_analytics(key_location, scopes)
     response = get_report(analytics, viewID, metrics, dimensions)
-    results = print_results(response)
-    print results
+
+    return response
+
+
+###### THE FOLLOWING FUNCTIONS WILL CALL GASTATS WITH PREDEFINED WAYS TO FILTER THE RESPONSE DATA #######
+
+
+def print_results(response):
+    """Parses and prints the Analytics Reporting API V4 response.
+    Args:
+      response: An Analytics Reporting API V4 response.
+    """
+    results = {}
+
+    for report in response.get('reports', []):
+        columnHeader = report.get('columnHeader', {})
+        dimensionHeaders = columnHeader.get('dimensions', [])
+        metricHeaders = columnHeader.get('metricHeader', {}).get('metricHeaderEntries', [])
+
+        for row in report.get('data', {}).get('rows', []):
+            dimensions = row.get('dimensions', [])
+            dateRangeValues = row.get('metrics', [])
+
+            for header, dimension in zip(dimensionHeaders, dimensions):
+                results[header] = dimension
+
+            for i, values in enumerate(dateRangeValues):
+                for metricHeader, value in zip(metricHeaders, values.get('values')):
+                    results[metricHeader.get('name')] = value
 
     return results

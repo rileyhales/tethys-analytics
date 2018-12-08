@@ -1,7 +1,8 @@
 from tethys_sdk.base import TethysAppBase, url_map_maker
-from django.core.management import settings
-import os
 
+"""
+This app was developed by Riley Hales at Brigham Young University in December 2018
+"""
 
 class Analytics(TethysAppBase):
     """
@@ -57,18 +58,3 @@ class Analytics(TethysAppBase):
         )
 
         return url_maps
-
-    def init_portal_parameters(self):
-        # This is the code that checks to see if django analytics is installed. If it is it adds the tags to implement it
-        print('getting portal analytical configuration status')
-        my_directory = os.path.dirname(__file__)
-        with open(os.path.join(my_directory, 'templates/analytics/analytics.html'), 'w') as file:
-            if 'analytical' in settings.INSTALLED_APPS:
-                file.write("{% load google_analytics_js %}{% google_analytics_js %}")
-
-        # Make the json lat/lon points object that gets mapped on the main page of the app
-        print('generating a user locations json file')
-        from model import user_points_json
-        user_points_json()
-
-        return

@@ -24,7 +24,7 @@
   <li class="title">App Navigation</li>
   <li class="{% if request.path == home_url %}active{% endif %}"><a href="{{ home_url }}">Overview</a></li>
   <li class="{% if request.path == config_url %}active{% endif %}"><a href="{{ config_url }}">Configuration Instructions</a></li>
-
+  <li class="title">Stats Pages</li>
   <!-- generate links to pages for each of the installed apps -->
   {%if urls%}
     {% for url in urls %}

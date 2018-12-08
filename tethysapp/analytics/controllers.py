@@ -1,7 +1,10 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from tools import applist, generate_app_urls
+from tools import applist, generate_app_urls, check_portal_analytics
+from model import lonlat_list
 
+check_portal_analytics()
+lonlat_list()
 
 @login_required()
 def home(request):

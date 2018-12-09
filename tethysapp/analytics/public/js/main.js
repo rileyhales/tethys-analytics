@@ -23,7 +23,11 @@ $(document).ready(function() {
         $("#apps").append(list_item);
     };
 
-//    stats = get_stats();
-//    $("#stats").text(JSON.stringify(stats));
+    $("#submit_request").on('click', function() {
+        console.log('pressed the button');
+        requester();
+        });
+
+
 
 });

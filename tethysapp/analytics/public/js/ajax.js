@@ -29,3 +29,25 @@ function get_stats() {
         });
     return stats
 }
+
+function requester() {
+    $("#apiData").text('Please wait while the analytics data is retrieved...');
+    data = {
+        'metrics': $("#metrics").val(),
+        'dimensions': $("#dimensions").val(),
+    }
+
+    $.ajax({
+        url:'/apps/analytics/ajax/requester/',
+        async: true,
+        data: JSON.stringify(data),
+        dataType: 'json',
+        contentType: 'application/json',
+        method: 'POST',
+        success: function(result) {
+//            $("#apiData").text(JSON.stringify(result));
+            $('pre').html(JSON.stringify(result, undefined, 2));
+            return result
+            }
+        });
+}

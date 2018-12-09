@@ -61,6 +61,7 @@ def generate_app_urls(request, apps_dict):
 
     return site_urls
 
+
 def check_portal_analytics():
     """
     This is the code that checks to see if django analytics is installed. If it is it adds the tags to implement it
@@ -76,3 +77,27 @@ def check_portal_analytics():
             file.write("{% load google_analytics_js %}{% google_analytics_js %}")
         else:
             print('Analytics has not been configured for this portal. Disabling tracking.')
+    return
+
+
+def supportedMetricsDimensions():
+    supported = {
+        'metrics': [
+            'ga:sessions',
+            'ga:users',
+            'ga:avgSessionDuration',
+        ],
+        'dimensions': [
+            'ga:country',
+            'ga:city',
+            'ga:browser',
+            'ga:pagePath',
+            'ga:latitude',
+            'ga:longitude',
+            'ga:continent',
+            'ga:city',
+            'ga:cityId',
+            'ga:countryIsoCode',
+        ],
+    }
+    return supported

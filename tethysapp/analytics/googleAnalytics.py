@@ -42,24 +42,10 @@ def get_report(analytics, viewID, metrics, dimensions):
 
 
 def sortMetricDimension(selections):
-    # pprint.pprint(selections)
-    metric_list = [
-        'ga:sessions',
-        'ga:users',
-        'ga:avgSessionDuration',
-    ]
-    dimension_list = [
-        'ga:country',
-        'ga:city',
-        'ga:browser',
-        'ga:pagePath',
-        'ga:latitude',
-        'ga:longitude',
-        'ga:continent',
-        'ga:city',
-        'ga:cityId',
-        'ga:countryIsoCode',
-    ]
+    from tools import supportedMetricsDimensions
+    supported = supportedMetricsDimensions()
+    metric_list = supported['metrics']
+    dimension_list = supported['dimensions']
     metrics = []
     dimensions = []
     for selection in selections:

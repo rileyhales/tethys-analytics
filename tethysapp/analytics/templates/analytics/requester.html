@@ -1,0 +1,25 @@
+{% extends "analytics/base.html" %}
+{% load tethys_gizmos staticfiles %}
+{% load tethys_gizmos %}
+{% load staticfiles %}
+
+
+{% block app_content %}
+<div id="header_information">
+  <h1>Request Composer</h1>
+    <p>
+      Use this interface to make simple requests to the Google Analytics API. Some options are hidden to prevent access
+      to personally identifiable information (PII). You may request multiple metrics and dimensions at the same time.
+    </p>
+    <p>
+      The information will be shown to you in the JSON format it is received in from Google. No attempt will be made
+      to process the information to make it more easily readable.
+    </p>
+    {% gizmo select_input metrics %}
+    {% gizmo select_input dimensions %}
+    <button type="button" class="btn btn-primary" id="submit_request">Request Data</button>
+</div>
+
+<div id="apiData"></div>
+<pre></pre>
+{% endblock %}

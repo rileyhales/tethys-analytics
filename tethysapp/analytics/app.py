@@ -38,6 +38,11 @@ class Analytics(TethysAppBase):
                 url='analytics/config',
                 controller='analytics.controllers.config',
             ),
+            UrlMap(
+                name='requester',
+                url='analytics/requester',
+                controller='analytics.controllers.requester',
+            ),
             UrlMap(                             # this is the controller for the page that shows app specific stats
                 name='template',                # {name} is an argument the controller needs to accept second
                 url='analytics/stats/{name}',
@@ -52,8 +57,8 @@ class Analytics(TethysAppBase):
             ),
             UrlMap(
                 name='stats',
-                url='analytics/ajax/stats',
-                controller='analytics.ajaxhandlers.analytics',
+                url='analytics/ajax/requester',
+                controller='analytics.ajaxhandlers.requester',
             ),
         )
 

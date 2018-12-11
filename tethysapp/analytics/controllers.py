@@ -5,7 +5,6 @@ from tethys_sdk.gizmos import SelectInput
 from tools import applist, generate_app_urls, check_portal_analytics, supportedMetricsDimensions
 from model import lonlat_list
 
-
 check_portal_analytics()
 lonlat_list()
 
@@ -82,12 +81,7 @@ def requester(request):
 @login_required()
 def app_template(request, name):
     """
-    Controller for the page that shows app specific data. This controller:
-    0. Clears data that would have been put into divs during previous renders
-    1. figures out what page you're on
-    2. Filters out the appropriate GA data for that page
-    3. puts that data into the raw_stats div
-    4. gets the urls for the navigation links on the left column like every page needs to
+    Controller for the page that shows app specific data.
     """
     # set the name and url maps for the page which are passed to the context
     apps = applist()    # a dictionary from tools.py of the form {'full app name': 'app package name'}

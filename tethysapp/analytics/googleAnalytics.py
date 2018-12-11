@@ -76,7 +76,7 @@ def GAstats(selections):
     scopes = ['https://www.googleapis.com/auth/analytics.readonly']
     key_location = os.path.join(os.path.dirname(__file__), 'workspaces/app_workspace/api_info.json')
     viewID = '184214759'    # my accounts
-    viewID = '185555963'    # the worldwater account
+    # viewID = '185555963'    # the worldwater account
     # make the queries and print the results
     analytics = init_analytics(key_location, scopes)
     response = get_report(analytics, viewID, metrics, dimensions)

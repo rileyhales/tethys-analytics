@@ -2,8 +2,35 @@
 
 
 {% block app_content %}
-<h1>Stats page for {{name}}</h1>
-<div id="raw_stats"></div>
+<h1>Stats page for: {{name}}</h1>
+<div id="table">
+<table>
+    <th><b>Statistic</b></th>
+    <th><b>Value</b></th>
 
+    <tr>
+        <td>All-time users</td>
+        <td id="users"></td>
+    </tr>
+    <!--<tr>-->
+        <!--<td>Users in the last 7 days</td>-->
+        <!--<td id="users7"></td>-->
+    <!--</tr>-->
+    <!--<tr>-->
+        <!--<td>Users in the last 28 days</td>-->
+        <!--<td id="users28"></td>-->
+    <!--</tr>-->
 
+    <tr>
+        <td>All-time Sessions</td>
+        <td id="sessions"></td>
+    </tr>
+    <tr>
+        <td>Average Session Time (mins)</td>
+        <td id="averageTime"></td>
+    </tr>
+
+</table>
+
+</div>
 {% endblock %}

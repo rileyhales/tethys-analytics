@@ -15,19 +15,26 @@ $.ajaxSetup({
 
 
 $(document).ready(function() {
+    // load parts of the page depending on which page you're on
+    url = window.location.href;
+    console.log(url);
 
-    installed_apps = retrieve_app_list();
+    if (url.endsWith("/apps/analytics/")) {
+        map();
+        installed_apps = retrieve_app_list();
 
-    for (app in installed_apps) {
-        list_item = '<li>' + app + '</li>';
-        $("#apps").append(list_item);
-    };
+        for (app in installed_apps) {
+            list_item = '<li>' + app + '</li>';
+            $("#apps").append(list_item);
+        };
+    }
+    if (url.includes("analytics/stats")) {
+        app_page_stats(url);
+    }
 
     $("#submit_request").on('click', function() {
-        console.log('pressed the button');
         requester();
         });
-
 
 
 });

@@ -14,20 +14,23 @@ function retrieve_app_list() {
     return installed_apps
 }
 
-function get_stats() {
+function app_page_stats(url) {
     $.ajax({
         url:'/apps/analytics/ajax/stats/',
         async: false,
-        data: 'give me the stats',
+        data: JSON.stringify({'url': url}),
         dataType: 'json',
         contentType: "application/json",
         method: 'POST',
         success: function(result) {
-            stats = result;
-            return stats
+            console.log(result)
+            $("#users").text(result['users']);
+//            $("#users7").text(result['users7']);
+//            $("#users28").text(result['users28']);
+            $("#sessions").text(result['sessions']);
+            $("#averageTime").text(result['avgSessionDuration']);
             },
         });
-    return stats
 }
 
 function requester() {
@@ -45,7 +48,6 @@ function requester() {
         contentType: 'application/json',
         method: 'POST',
         success: function(result) {
-//            $("#apiData").text(JSON.stringify(result));
             $('pre').html(JSON.stringify(result, undefined, 2));
             return result
             }

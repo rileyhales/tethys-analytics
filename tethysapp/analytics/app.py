@@ -56,6 +56,11 @@ class Analytics(TethysAppBase):
                 controller='analytics.ajaxhandlers.get_applist',
             ),
             UrlMap(
+                name='app_stats',
+                url='analytics/ajax/stats',
+                controller='analytics.ajaxhandlers.appstats',
+            ),
+            UrlMap(
                 name='stats',
                 url='analytics/ajax/requester',
                 controller='analytics.ajaxhandlers.requester',

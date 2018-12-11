@@ -83,8 +83,11 @@ def check_portal_analytics():
 def supportedMetricsDimensions():
     supported = {
         'metrics': [
-            'ga:sessions',
             'ga:users',
+            'ga:7dayUsers',
+            'ga:14dayUsers',
+            'ga:28dayUsers',
+            'ga:sessions',
             'ga:avgSessionDuration',
         ],
         'dimensions': [

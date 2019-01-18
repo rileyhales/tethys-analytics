@@ -2,11 +2,11 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from tethys_sdk.gizmos import SelectInput
 
-from tools import applist, generate_app_urls, check_portal_analytics, supportedMetricsDimensions
-from model import lonlat_list
+from .tools import applist, generate_app_urls, check_portal_analytics, supportedMetricsDimensions
+from .model import lonlat_list
 
 check_portal_analytics()
-lonlat_list()
+# lonlat_list()
 
 
 @login_required()

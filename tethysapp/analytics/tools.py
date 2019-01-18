@@ -5,7 +5,7 @@ def applist():
     """
     import os
 
-    from tethys_apps.app_harvester import SingletonAppHarvester as AppHarvester
+    from tethys_apps.harvester import SingletonHarvester as AppHarvester
     harvester = AppHarvester()
     AppHarvester.harvest_apps(harvester)
     app_names = harvester.apps     # a list with all the apps as collected by the portal
@@ -13,7 +13,7 @@ def applist():
     from tethys_apps.tethysapp import __path__ as tethys_app_dir  # for getting the list of package names
     app_pkg_names = os.listdir(tethys_app_dir[0])
     app_pkg_names.remove('__init__.py')
-    app_pkg_names.remove('__init__.pyc')
+    app_pkg_names.remove('__pycache__')
     app_pkg_names.remove('.gitignore')
 
     apps = {}

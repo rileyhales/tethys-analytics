@@ -1,5 +1,5 @@
 import os
-from apiclient.discovery import build
+from googleapiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
 
 """Hello Analytics Reporting API V4."""
@@ -42,7 +42,7 @@ def get_report(analytics, viewID, metrics, dimensions):
 
 
 def sortMetricDimension(selections):
-    from tools import supportedMetricsDimensions
+    from .tools import supportedMetricsDimensions
     supported = supportedMetricsDimensions()
     metric_list = supported['metrics']
     dimension_list = supported['dimensions']

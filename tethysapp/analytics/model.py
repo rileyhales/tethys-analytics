@@ -9,7 +9,7 @@ def lonlat_list():
     """
 
     import geojson, json, os
-    from googleAnalytics import GAstats
+    from .googleAnalytics import GAstats
 
     print('Generating a GeoJSON user locations file')
 

@@ -1,8 +1,8 @@
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
-from googleAnalytics import GAstats
-from tools import applist
+from .googleAnalytics import GAstats
+from .tools import applist
 
 import ast
 
@@ -12,20 +12,26 @@ def get_applist(request):
     """
     controller for sending the list of apps to javascript using the applist from tools.py
     """
-    apps = applist()
-    return JsonResponse(apps)
+    return JsonResponse(applist())
 
 
 def requester(request):
     """
     ajax controller for sending analytics results to the custom request composer page
     """
-    body = ast.literal_eval(request.body)       # gets the list of selected metrics/dimensions
+    body = ast.literal_eval(request.body.decode('UTF-8'))       # gets the list of selected metrics/dimensions
+
+    import pprint
+    # pprint.pprint(body)
+    pprint.pprint(request.body)
+
 
     selections = body['metrics']                # combines the metrics and dimensions into a single list
     dimensions = body['dimensions']
     for i in range(len(dimensions)):
         selections.append(dimensions[i])
+
+    pprint.pprint(selections)
 
     results = GAstats(selections)               # gets the analytics data for those choices
 

@@ -40,6 +40,8 @@ function requester() {
         'dimensions': $("#dimensions").val(),
     }
 
+    console.log(data);
+
     $.ajax({
         url:'/apps/analytics/ajax/requester/',
         async: true,

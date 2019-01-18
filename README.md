@@ -1,11 +1,16 @@
 <h1>Tethys Portal Analytics Viewer App</h1>
 
-<p> The Tethys Portal Analytics Viewer App allows portal administrators to track and visualize the usage of Tethys applications for Tethys 2.1 and later. Analytics data are provided by Google Analytics and and implemented in the Tethys environment using the Django-Analytical python package. For information about these services, refer to:</p>
+<p> The Tethys Portal Analytics Viewer App allows portal administrators to track and visualize the usage of Tethys applications for Tethys 2.1 and later. Analytics data are provided by Google Analytics and implemented in the Tethys environment using the Django-Analytical python package. For information about these services, refer to:</p>
 <li><b>Tethys:</b> <a href="http://www.tethysplatform.org/" target="_blank">http://www.tethysplatform.org/</a>
 <li><b>Google Analytics:</b> <a href="https://analytics.google.com/" target="_blank">https://analytics.google.com/</a>
 <li><b>Django-Analytical:</b> <a href="https://github.com/jazzband/django-analytical" target="_blank">https://github.com/jazzband/django-analytical</a>
 
 <p>This application was built by Riley Hales at the Brigham Young University Hydroinformatics Lab, 2019.
+
+
+<h2>Security Warnings</h2>
+<p>If you modify this app and use GitHub to track your changes, you need to exclude the Google Analytics API key from your commits for security reasons. If you forget, you should immediately return to <a target="_blank" href="console.developers.google.com">console.developers.google.com</a> and deauthorize that key. Follow the instructions below to set up a new analytics reporting service account and generate a new key. If you followed these instructions, the key should only be valid for queries, not modifications of your Google account so your account will remain safe but you will leak personal information.</p>
+<p>By using this app and creating Google Analytics accounts, you will agree to the responsible use of the information gathered about your users. You should follow any applicable best practices to ensure this information is not made publicly available or misused.</p> 
 
 
 <h2>Configuration Instructions</h2>

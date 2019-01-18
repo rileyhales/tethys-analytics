@@ -6,7 +6,7 @@ from .tools import applist, generate_app_urls, check_portal_analytics, supported
 from .model import lonlat_list
 
 check_portal_analytics()
-# lonlat_list()
+lonlat_list()
 
 
 @login_required()

@@ -16,8 +16,8 @@ class Analytics(TethysAppBase):
     root_url = 'analytics'
     color = '#8b0000'
     description = 'View usage statistics as tracked by Google Analytics for configured apps on this portal'
-    tags = ''
-    enable_feedback = False
+    tags = 'Analytics'
+    enable_feedback = True
     feedback_emails = []
 
     def url_maps(self):

@@ -47,7 +47,7 @@ def appstats(request):
     3. Query analytics based on the specified list, filter the results based on the page path using the name from step
         1, fill the data dictionary, and return it as a json response.
     """
-    url = ast.literal_eval(request.body)['url']
+    url = ast.literal_eval(request.body.decode('UTF-8'))['url']
     substring = url.split('/')
     apps = applist()
     for app in apps:

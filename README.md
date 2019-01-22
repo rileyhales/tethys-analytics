@@ -71,9 +71,8 @@
   </ol>
 
 
-<h2>Making Tethys Apps trackable
+<h2>Making Tethys Apps trackable</h2>
 
-  
   <p>To make an app trackable using the portal's configuration, you need to modify app.py and base.html. The following is an explanation of the code proposed as an addition to the base tethys templates used to scaffold a new app.</p>
   <p>If this propose change to the app templates is accepted, then developers shouldn't have to do any work to make tracking work for their applications.
   

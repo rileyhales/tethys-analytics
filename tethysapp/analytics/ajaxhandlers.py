@@ -15,22 +15,18 @@ def get_applist(request):
     return JsonResponse(applist())
 
 
+@login_required()
 def requester(request):
     """
     ajax controller for sending analytics results to the custom request composer page
     """
-    body = ast.literal_eval(request.body.decode('UTF-8'))       # gets the list of selected metrics/dimensions
-
     import pprint
-    # pprint.pprint(body)
-    pprint.pprint(request.body)
-
+    body = ast.literal_eval(request.body.decode('UTF-8'))       # gets the list of selected metrics/dimensions
 
     selections = body['metrics']                # combines the metrics and dimensions into a single list
     dimensions = body['dimensions']
     for i in range(len(dimensions)):
         selections.append(dimensions[i])
-
     pprint.pprint(selections)
 
     results = GAstats(selections)               # gets the analytics data for those choices
@@ -38,6 +34,7 @@ def requester(request):
     return JsonResponse(results)
 
 
+@login_required()
 def appstats(request):
     """
     controller for getting stats on the individual app pages.

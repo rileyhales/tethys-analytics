@@ -27,7 +27,7 @@ def applist():
 
 def generate_app_urls(request, apps_dict):
     """
-    This fucntion creates urls for every app installed on the portal this app is on.
+    This function creates urls for every app installed on the portal this app is on.
 
     Use this app in the controller for every navigable page so that the list of app links is visible in the navigation
     pane of that page. In base.html, there is a conditional set of django tags that will load the links if you give it
@@ -60,24 +60,6 @@ def generate_app_urls(request, apps_dict):
     }), apps_dict))
 
     return site_urls
-
-
-def check_portal_analytics():
-    """
-    This is the code that checks to see if django analytics is installed. If it is it adds the tags to implement it
-    """
-    import os
-    from django.core.management import settings
-
-    print('Getting portal analytical configuration status.')
-    my_directory = os.path.dirname(__file__)
-    with open(os.path.join(my_directory, 'templates/analytics/analytics.html'), 'w') as file:
-        if 'analytical' in settings.INSTALLED_APPS:
-            print('Analytics is enabled for this Portal. Enabling tracking.')
-            file.write("{% load google_analytics_js %}{% google_analytics_js %}")
-        else:
-            print('Analytics has not been configured for this portal. Disabling tracking.')
-    return
 
 
 def supportedMetricsDimensions():

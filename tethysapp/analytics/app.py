@@ -6,6 +6,7 @@ import os
 This app was developed by Riley Hales at Brigham Young University in December 2018
 """
 
+
 class Analytics(TethysAppBase):
     """
     Tethys app class for Portal Analytics Viewer.

@@ -15,7 +15,7 @@
 
 <h2>Configuration Instructions</h2>
  
- <p>Before using this app, you should do three things: 1) setup Google Analytics credentials and downloaded an api key, 2) make sure you have added the django-analytical package to the list of installed apps on your portal and specified a property ID, 3) and added the logical check to each of the apps on your portal to enable tracking for that app.</p>
+ <p>Before using this app, you should do two things: 1) setup Google Analytics credentials and downloaded an api key, 2) make sure you have added the django-analytical package to the list of installed apps on your portal and specified a property ID.</p>
 
   <h3>1. Setup a Google Analytics for your portal</h3>
     <ol>
@@ -71,46 +71,18 @@
   </ol>
 
 
-  <h3>3. Configuring an App</h3>
-  <p>To make an app trackable using the portal's configuration, you need to create a new html file, modify app.py, and modify base.py.</p>
+<h2>Making Tethys Apps trackable
+
+  
+  <p>To make an app trackable using the portal's configuration, you need to modify app.py and base.html. The following is an explanation of the code proposed as an addition to the base tethys templates used to scaffold a new app.</p>
+  <p>If this propose change to the app templates is accepted, then developers shouldn't have to do any work to make tracking work for their applications.
+  
   <ol>
-    <li>Create a new html document
-      <ul>
-        <li>Create a new, blank html document, called analytics.html, in the templates folder of the app. Do not add anything to this document.</li>
-      </ul>
-    </li>
-    <li>App.py
-      <ul>
-        <li>
-          Add an import statement: from django.core.management import settings<br>
-          This imports the settings.py file of the tethys portal where you added the analytical python package to the list of installed apps and listed the tracking ID.<br>
-        </li>
-        <li>
-          Add the following 4 lines of code. Put it in the class and beneath the declaration of name, color, etc.<br>
-          <p>
-            app_file_path = os.path.dirname(__file__)<br>
-            with open(os.path.join(app_file_path, 'templates/[name of your app package]/analytics.html'), 'w') as file:<br>
-            if 'analytical' in settings.INSTALLED_APPS:<br>
-            file.write("{% load google_analytics_js %}{% google_analytics_js %}")
-          </p>
-        </li>
-        <li>
-            This code gets the file path of app.py. Then it uses that to open the analytics.html file you created.
-            make sure you appropriately edit the arguments in os.path.join() to get the correct file path of the
-            template. When the code opens this document, all the contents of the file are erased. Next it checks if
-            the analytical package is installed to the portal. If it is, it adds the django tags to the html file.
-        </li>
-      </ul>
-    </li>
-    <li>Modify base.html
-      <ul>
-        <li>Open base.html</li>
-        <li>Under the "block scripts" tag, add include "[name of your app package]/analytics.html"</li>
-        <li>
-            The include tag lets you use the entire contents of the analytics.html file where you wrote the tag. This
-            will either be a blank document, having no effect, or a document containing the tags to implement Google
-            Analytics.
-        </li>
-      </ul>
-    </li>
+    <li>Check to see if Django-Analytical is installed on the portal. Add a property to the app class in app.py with the boolean result of this check.
+        <ul>
+            <li>The property is called analytics. It is a boolean check to see if the Django-Analytical package has been installed on the portal. It is important that it be referenced this way so that this app can check the configuration status of other apps installed on the portal easily.</li>
+            <code>analytics = bool('analytical' in settings.INSTALLED_APPS)</code>
+        </ul>            
+    <li>Write the django tags that implement the tracking script to analytics.html based on the value of the app.analytics value from step 1. This is probably best placed in the __init__ function for the class.</li>
+    <li>In base.html, under the block scripts tag, add the line {% include analytics.html %}. Because of the way the code was written, this will be empty if the check was false and have the tags if the code is true. This will not interfere with app performance regardless of the contents.
   </ol>

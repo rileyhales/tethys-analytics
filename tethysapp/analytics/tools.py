@@ -62,24 +62,6 @@ def generate_app_urls(request, apps_dict):
     return site_urls
 
 
-def check_portal_analytics():
-    """
-    This is the code that checks to see if django analytics is installed. If it is it adds the tags to implement it
-    """
-    import os
-    from django.core.management import settings
-
-    print('Getting portal analytical configuration status.')
-    my_directory = os.path.dirname(__file__)
-    with open(os.path.join(my_directory, 'templates/analytics/analytics.html'), 'w') as file:
-        if 'analytical' in settings.INSTALLED_APPS:
-            print('Analytics is enabled for this Portal. Enabling tracking.')
-            file.write("{% load google_analytics_js %}{% google_analytics_js %}")
-        else:
-            print('Analytics has not been configured for this portal. Disabling tracking.')
-    return
-
-
 def supportedMetricsDimensions():
     supported = {
         'metrics': [

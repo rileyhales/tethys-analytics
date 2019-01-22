@@ -22,7 +22,7 @@ class Analytics(TethysAppBase):
     tags = 'Analytics'
     enable_feedback = True
     feedback_emails = []
-    analytics = bool('analytical' in settings.INSTALLED_APPS)
+    analytics = bool('analytical' in settings.INSTALLED_APPS and settings.GOOGLE_ANALYTICS_JS_PROPERTY_ID)
 
     def url_maps(self):
         """
@@ -75,8 +75,6 @@ class Analytics(TethysAppBase):
 
     def __init__(self):
         if self.analytics:
-            with open(os.path.join(os.path.dirname(__file__), 'templates/analytics/analytics.html'), 'w') as file:
-                print('Analytics is enabled for this Portal. Enabling tracking.')
-                print('Your GA property ID is: ', settings.GOOGLE_ANALYTICS_JS_PROPERTY_ID)
+            with open(os.path.join(self.get_app_workspace(), 'analytics.html'), 'w') as file:
                 file.write("{% load google_analytics_js %}{% google_analytics_js %}")
         return

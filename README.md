@@ -79,8 +79,7 @@
   <ol>
     <li>Check to see if Django-Analytical is installed on the portal. Add a property to the app class in app.py with the boolean result of this check.
         <ul>
-            <li>The property is called analytics. It is a boolean check to see if the Django-Analytical package has been installed on the portal. It is important that it be referenced this way so that this app can check the configuration status of other apps installed on the portal easily.</li>
-            <code>analytics = bool('analytical' in settings.INSTALLED_APPS)</code>
+            <li>The property is called analytics. It is a boolean check to see if the Django-Analytical package has been installed on the portal. It is important that it be referenced this way so that this app can check the configuration status of other apps installed on the portal easily. <code>analytics = bool('analytical' in settings.INSTALLED_APPS and settings.GOOGLE_ANALYTICS_JS_PROPERTY_ID)</code></li>
         </ul>            
     <li>Write the django tags that implement the tracking script to analytics.html based on the value of the app.analytics value from step 1. This is probably best placed in the __init__ function for the class.</li>
     <li>In base.html, under the block scripts tag, add the line {% include analytics.html %}. Because of the way the code was written, this will be empty if the check was false and have the tags if the code is true. This will not interfere with app performance regardless of the contents.

@@ -27,7 +27,7 @@ def applist():
 
 def generate_app_urls(request, apps_dict):
     """
-    This fucntion creates urls for every app installed on the portal this app is on.
+    This function creates urls for every app installed on the portal this app is on.
 
     Use this app in the controller for every navigable page so that the list of app links is visible in the navigation
     pane of that page. In base.html, there is a conditional set of django tags that will load the links if you give it

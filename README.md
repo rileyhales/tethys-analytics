@@ -13,11 +13,7 @@
 <p>By using this app and creating Google Analytics accounts, you will agree to the responsible use of the information gathered about your users. You should follow any applicable best practices to ensure this information is not made publicly available or misused.</p> 
 
 
-<h2>Configuration Instructions</h2>
- 
- <p>Before using this app, you should do two things: 1) setup Google Analytics credentials and downloaded an api key, 2) make sure you have added the django-analytical package to the list of installed apps on your portal and specified a property ID.</p>
-
-  <h3>1. Setup a Google Analytics for your portal</h3>
+<h2>Preparing a Google Analytics account for Tethys</h2>
     <ol>
       <li>Go to <a target="_blank" href="console.developers.google.com">console.developers.google.com</a></li>
       <li>Go to the APIs and Services section and find the Credentials tab</li>
@@ -26,8 +22,8 @@
           <li>Name the service account getmetrics</li>
           <li>Role: Project Owner</li>
           <li>Note the service account ID email address listed. copy this address.</li>
-          <li>Choose JSON for your key type.</li>
-          <li><b>DO NOT LOSE THIS KEY. YOU CANNOT GET ANOTHER COPY.</b></li>
+          <li>If you want to use the Portal Analytics Tracking App to visualize metrics, you will need to get an API key. Choose JSON for your key type.</li>
+          <li><b>DO NOT LOSE OR SHARE THIS KEY</b></li>
           <li>Make a copy that you can put in the analytics app's 'app workspace' folder. name it api_info.json</li>
         </ul>
       </li>
@@ -40,18 +36,42 @@
         </ul>
       <li>Go to <a target="_blank" href="analytics.google.com">analytics.google.com</a></li>
       <li>In admin settings, find the User Management section for the <i>account</i> (not property or view).</li>
-      <li>Add a new user with the email address you got from the previous steps. Grant Read & Analyze permissions.</li>
-      <li>Wait at least 5 minutes before making requests.</li>
+      <li>Add a new user with the email address you got from the previous steps. Grant Read & Analyze permissions. You will need to wait at least 5 minutes before making requests while these changes synchronize across Google's services.</li>
+      <li>Create A New Property. Set the appropriate website name, URL, content category, time zone, etc. When you finish, you will get a "tracking-ID" in the format "UA-123456789-1". The 9 digits in the center are an identifier for your account and the "-1" corresponds to the number of the property you're tracking. Save this number for configuring your portal.</li>
+      <li>In your tethys portal, navigate to the file "../tethys/src/tethys_portal/settings.py". In that file, you will find a line about half way down that says GOOGLE_ANALYTICS_JS_PROPERTY_ID = ''. Inside the single quotes, add your Tracking ID from the previous step. Save.'</li>
     </ol>
 
 
-  <h3>2. Configuring the Portal</h3>
-  <p>Tethys Portals can be configured to track app usage of configured apps using the Django-Analytical python package.
-    <ul>
-      <li><a target="_blank" href="https://django-analytical.readthedocs.io/en/latest">Read the Documentation on ReadTheDocs</a> </li>
-      <li><a target="_blank" href="https://github.com/jazzband/django-analytical">View the source code on GitHub</a> </li>
-    </ul>
-  </p>
+<h2>Special Instructions for  Tethys 3</h2>
+
+<p>Beginning in Tethys 3 distributions, all the portal side setup for analytics have been automated. To use this app in Tethys 3 and to track apps created in Tethys 3, you need to have a properly set up Google Analytics account and have a copy of the API key to provide to the app in the 'app_workspace folder'. Make sure the key is name 'api_info.json'. </p>
+<p><i>If apps do not track correctly, they may not have added the necessary code to implement tracking when upgrading from Tethys 2 to 3. Refer to the Special Instructions for Tethys 2.X and Tethys documentation to solve compatibility issues.</i></p>
+
+
+<h2>Special Instructions for Tethys 2.X</h2>
+
+<p>To track applications in Tethys 2 environments, you need to:
+<ol>
+    <li>Create a Google Analytics account as describe above</li>
+    <li>Modify the applications to have django-analytical tracking tags</li>
+    <li>Modify the portal's settings.py file to specifiy tracking ID's</li>
+    </ol>
+
+  <h3>Adapting Applications</h3>
+  Modify app.py. This code will perform an automated check to see if Django-Analytical is the necessary django tags get added to the html scripts sections. Otherwise, they are cleared.
+    <ol>
+        <li>Modify app.py. Add the following class property: <code>analytics = bool('analytical' in settings.INSTALLED_APPS and settings.GOOGLE_ANALYTICS_JS_PROPERTY_ID)</code>. This is a boolean check to see if the portal is configured correctly. It is set up this way so that the Portal Analytics App can refer to the property later.</li>
+        <li>Under the analytics class property you just added, you need to add 3 lines of code that write the django tags to the scripts section of the base template.
+            <br><code>
+                with open(os.path.join(os.path.dirname(__file__), 'templates/analytics/analytics.html'), 'w') as file:
+                <blockquote>if analytics:
+                <blockquote>file.write("{% load google_analytics_js %}{% google_analytics_js %}")
+            </code>
+        <li>Create a new blank html file with the rest of the templates called analytics.html.</li>
+        <li>In base.html, under the block scripts tag, add the line {% include analytics.html %}. Because of the way the code was written, this will be empty if the check was false and have the tags if the code is true. This will not interfere with app performance regardless of the contents.</li>        
+    </ol>
+  
+  <h3>Adding Django-Analytical</h3>
   <ol>
     <li>Install Django-Analytical
       <ul>
@@ -71,16 +91,4 @@
   </ol>
 
 
-<h2>Making Tethys Apps trackable</h2>
 
-  <p>To make an app trackable using the portal's configuration, you need to modify app.py and base.html. The following is an explanation of the code proposed as an addition to the base tethys templates used to scaffold a new app.</p>
-  <p>If this propose change to the app templates is accepted, then developers shouldn't have to do any work to make tracking work for their applications.
-  
-  <ol>
-    <li>Check to see if Django-Analytical is installed on the portal. Add a property to the app class in app.py with the boolean result of this check.
-        <ul>
-            <li>The property is called analytics. It is a boolean check to see if the Django-Analytical package has been installed on the portal. It is important that it be referenced this way so that this app can check the configuration status of other apps installed on the portal easily. <code>analytics = bool('analytical' in settings.INSTALLED_APPS and settings.GOOGLE_ANALYTICS_JS_PROPERTY_ID)</code></li>
-        </ul>            
-    <li>Write the django tags that implement the tracking script to analytics.html based on the value of the app.analytics value from step 1. This is probably best placed in the __init__ function for the class.</li>
-    <li>In base.html, under the block scripts tag, add the line {% include analytics.html %}. Because of the way the code was written, this will be empty if the check was false and have the tags if the code is true. This will not interfere with app performance regardless of the contents.
-  </ol>

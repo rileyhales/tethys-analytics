@@ -14,7 +14,7 @@ dependencies = ['google-api-python-client', 'apiclient', 'oauth2client', 'pprint
 
 setup(
     name=release_package,
-    version='0.0.1',
+    version='1.0',
     tags='',
     description='View usage statistics as tracked by Google Analytics for configured apps on this portal',
     long_description='',

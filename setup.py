@@ -22,7 +22,7 @@ setup(
     author='Riley Hales',
     author_email='',
     url='',
-    license='',
+    license='BSD 3-Clause',
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     namespace_packages=['tethysapp', 'tethysapp.' + app_package],
     include_package_data=True,

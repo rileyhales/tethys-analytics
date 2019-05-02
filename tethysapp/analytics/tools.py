@@ -83,6 +83,13 @@ def supportedMetricsDimensions():
             'ga:city',
             'ga:cityId',
             'ga:countryIsoCode',
+            'ga:date',
+            'ga:year',
+            'ga:month',
+            'ga:week',
+            'ga:day',
+            # 'ga:day'
+            # ','
         ],
     }
     return supported

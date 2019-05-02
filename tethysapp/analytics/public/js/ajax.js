@@ -14,22 +14,22 @@ function retrieve_app_list() {
     return installed_apps
 }
 
-function app_page_stats(url) {
+function app_page(url) {
     $.ajax({
-        url:'/apps/analytics/ajax/stats/',
-        async: false,
+        url:'/apps/analytics/ajax/app_page/',
+        true: false,
         data: JSON.stringify({'url': url}),
         dataType: 'json',
         contentType: "application/json",
         method: 'POST',
         success: function(result) {
-            console.log(result)
+            console.log(result);
             $("#users").text(result['users']);
-//            $("#users7").text(result['users7']);
-//            $("#users28").text(result['users28']);
             $("#sessions").text(result['sessions']);
             $("#averageTime").text(result['avgSessionDuration']);
+            $("#userTimeChart").text(result['timeusers']);
             },
+
         });
 }
 

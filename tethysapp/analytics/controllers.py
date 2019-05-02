@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from tethys_sdk.gizmos import SelectInput
+import os
 
 from .tools import applist, generate_app_urls, supportedMetricsDimensions
 from .model import lonlat_list

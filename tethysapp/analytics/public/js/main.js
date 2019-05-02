@@ -29,7 +29,7 @@ $(document).ready(function() {
         };
     }
     if (url.includes("analytics/stats")) {
-        app_page_stats(url);
+        app_page(url);
     }
 
     $("#submit_request").on('click', function() {

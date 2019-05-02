@@ -1,6 +1,4 @@
 from tethys_sdk.base import TethysAppBase, url_map_maker
-from django.core.management import settings
-import os
 
 """
 This app was developed by Riley Hales at Brigham Young University in December 2018
@@ -22,12 +20,7 @@ class Analytics(TethysAppBase):
     tags = 'Analytics'
     enable_feedback = True
     feedback_emails = []
-    analytics = bool('analytical' in settings.INSTALLED_APPS and settings.GOOGLE_ANALYTICS_JS_PROPERTY_ID)
-
-    with open(os.path.join(os.path.dirname(__file__), 'templates/analytics/analytics.html'), 'w') as file:
-        if analytics:
-            file.write("{% load google_analytics_js %}{% google_analytics_js %}")
-
+    app_page = ''
 
     def url_maps(self):
         """
@@ -66,8 +59,8 @@ class Analytics(TethysAppBase):
             ),
             UrlMap(
                 name='app_stats',
-                url='analytics/ajax/stats',
-                controller='analytics.ajaxhandlers.appstats',
+                url='analytics/ajax/app_page',
+                controller='analytics.ajaxhandlers.app_page',
             ),
             UrlMap(
                 name='stats',

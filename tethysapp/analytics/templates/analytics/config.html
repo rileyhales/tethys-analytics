@@ -1,105 +1,92 @@
 {% extends "analytics/base.html" %}
-
+{% load staticfiles %}
 
 {% block app_content %}
-  <h1>Configuration Instructions</h1>
-
-  <p>For the most current instructions and community support, <a href="https://github.com/rileyhales/tethys-analytics">visit the GitHub page.</a></p>
-
-  <p>
-    Before using this app, make sure you have specified a property ID in the portal settings, the corrresponding ViewID
-    in the google analytics file, and the corresponding api key is in the app workspace folder named api_info.json,
-  </p>
-
-  <h2>Setup a Google Analytics for your portal</h2>
-    <ol>
-      <li>Go to <a target="_blank" href="console.developers.google.com">console.developers.google.com</a></li>
-      <li>Go to the APIs and Services section and find the Credentials tab</li>
-      <li>Create new credentials -> Service Account Key -> New service account</li>
-        <ul>
-          <li>Name the service account getmetrics</li>
-          <li>Role: Project Owner</li>
-          <li>Note the service account ID email address listed. copy this address.</li>
-          <li>Choose JSON for your key type.</li>
-          <li><b>DO NOT LOSE THIS KEY. YOU CANNOT GET ANOTHER COPY.</b></li>
-          <li>Make a copy that you can put in the analytics app's 'app workspace' folder. name it api_info.json</li>
-        </ul>
-      <li>Return to the IAM & Admin section and go to the IAM tab</li>
-      <li>Add a new member.
-        <ul>
-          <li>Use the email address from the previous steps. It should prompt you to use that as you begin typing</li>
-          <li>Choose Project Owner as the role.</li>
-          <li>Save</li>
-        </ul>
-      <li>Go to <a target="_blank" href="analytics.google.com">analytics.google.com</a></li>
-      <li>In admin settings, find the User Management section for the account (not property or view).</li>
-      <li>Add a new user with the email address you got from the previous steps. Grant Read & Analyze permissions.</li>
-      <li>Wait at least 5 minutes before making requests.</li>
-    </ol>
-
-  <h2>Configuring the Portal</h2>
-  <p>Tethys Portals can be configured to track app usage of configured apps using the Django-Analytical python package.
-    <ul>
-      <li><a target="_blank" href="https://django-analytical.readthedocs.io/en/latest">Read the Documentation on ReadTheDocs</a> </li>
-      <li><a target="_blank" href="https://github.com/jazzband/django-analytical">View the source code on GitHub</a> </li>
-    </ul>
-  </p>
-  <ol>
-    <li>Install Django-Analytical</li>
-      <ul>
-        <li>Open the command line for the server</li>
-        <li>Enter the tethys python environment with the shortcut alias 't'</li>
-        <li>conda install django-analytical</li>
-      </ul>
-    <li>Configure the portal's settings.py file</li>
-      <ul>
-        <li>The settings.py file is found in .../tethys/src/tethys_portal/settings.py</li>
-        <li>Find the INSTALLED_APPS = () tuple (should contain about a dozen package names)</li>
-        <li>Above that tuple, add GOOGLE_ANALYTICS_JS_PROPERTY_ID = 'UA-12345678-9' replacing the ID with the one generated for you by Google</li>
-        <li>Add 'analytical' as the last element of the INSTALLED_APPS tuple</li>
-      </ul>
-  </ol>
-
-
-  <h2>Configuring an App</h2>
-  <p>To make an app trackable using the portal's configuration, you need to create a new html file, modify app.py, and modify base.py.</p>
-  <ol>
-    <li>Create a new html document</li>
-      <ul>
-        <li>Create a new, blank html document, called analytics.html, in the templates folder of the app. Do not add anything to this document.</li>
-      </ul>
-    <li>App.py</li>
-      <ul>
-        <li>
-          Add an import statement: from django.core.management import settings<br>
-          This imports the settings.py file of the tethys portal where you added the analytical python package to the list of installed apps and listed the tracking ID.<br>
+<div style="overflow-y: auto; width: 65%">
+  <h1>Tethys Portal Analytics Viewer App</h1>
+  <div style="float: left; padding: 10px;">
+    <div>
+      <h2>Web-Analytics</h2>
+      <div style="width: 100%; padding: 5px;">
+        <div style="width: 65%; float: left; padding: 5px;">
+          <p>Internet analytics refers to the process of collecting information about how a
+            website is used and user demographics. Analytics information is either collected server-side, where the
+            website is hosted, or using web-services. Web-based analytics uses an asynchronous script in the header of a
+            page which sends information about the browsing session to another website. That website processes the
+            information and makes it available to the website's admins.</p>
+          <p>Tethys is configured to collect web-analytics data using web-based analytics services supported by
+            Django-Analytical where Google Analytics is the recommended option. The Tethys Portal Analytics Viewer App
+            is compatible with Tethys 3+ portals and requires the portal be configured with Google Analytics. For
+            information about these services, refer to:</p>
+          <li><b>Tethys:</b> <a href="http://docs.tethysplatform.org/en/stable/tethys_portal.html#" target="_blank">http://docs.tethysplatform.org/en/stable/tethys_portal.html</a>
+          <li><b>Google Analytics:</b> <a href="https://analytics.google.com/"
+                                          target="_blank">https://analytics.google.com/</a>
+          <li><b>Django-Analytical:</b> <a href="https://github.com/jazzband/django-analytical" target="_blank">https://github.com/jazzband/django-analytical</a>
+            <p>This application was built by Riley Hales at the Brigham Young University Hydroinformatics Lab, 2019.
+        </div>
+        <div style="float: left; width: 35%; height: 100%; padding: 5px;">
+          <img src="{% static 'analytics/images/webanalytics.png' %}" style="width: 100%;">
+        </div>
+      </div>
+    </div>
+    <br>
+    <div style="width: 100%;">
+      <h2>Configure Google Analytics and This App</h2>
+      <p>This app requires that your portal already by configured by the portal admins to record analytics data with
+        Google Analytics. For instructions on enabling tracking on a portal, refer to the <a href="">Tethys Portal
+          Web-Analytics Documentation page</a>.</p>
+      <ol>
+        <li>Log in to <a target="_blank" href="console.developers.google.com">console.developers.google.com</a> with the
+          Google Analytics account that owns the View-ID used on this portal. You <strong><i>must</i></strong> use the
+          same account.
         </li>
-        <li>
-          Add the following 4 lines of code. Put it in the class and beneath the declaration of name, color, etc.<br>
-          <p>
-            app_file_path = os.path.dirname(__file__)<br>
-            with open(os.path.join(app_file_path, 'templates/[name of your app package]/analytics.html'), 'w') as file:<br>
-            if 'analytical' in settings.INSTALLED_APPS:<br>
-            file.write("{% load google_analytics_js %}{% google_analytics_js %}")
-          </p>
+        <li>Go to "APIs and Services" then find the Credentials tab</li>
+        <li>Create new credentials -> Service Account Key -> New service account
+          <ul>
+            <li>Name the service account getmetrics</li>
+            <li>Role: Project Owner</li>
+            <li>Copy the service account ID email address listed.</li>
+            <li>Get an API key. Choose JSON for your key type. <b>DO NOT LOSE OR SHARE THIS KEY</b></li>
+            <li>Make a copy of the ket and put it in the analytics app's 'app workspace' folder. You
+              <strong><i>must</i></strong> name i<strong><i>only</i></strong>t api_info.json
+            </li>
+          </ul>
         </li>
-        <li>
-            This code gets the file path of app.py. Then it uses that to open the analytics.html file you created.
-            make sure you appropriately edit the arguments in os.path.join() to get the correct file path of the
-            template. When the code opens this document, all the contents of the file are erased. Next it checks if
-            the analytical package is installed to the portal. If it is, it adds the django tags to the html file.
+        <li>Return to the IAM & Admin section and go to the IAM tab</li>
+        <li>Add a new member.
+          <ul>
+            <li>Use the email address from the previous steps. It should prompt you to use that as you begin
+              typing
+            </li>
+            <li>Choose Project Owner as the role.</li>
+            <li>Save</li>
+          </ul>
+        <li>Go to <a target="_blank" href="analytics.google.com">analytics.google.com</a></li>
+        <li>In admin settings, find the User Management section for the <strong><i>account</i></strong> (not property or
+          view).
         </li>
-      </ul>
-    <li>Modify base.html</li>
-      <ul>
-        <li>Open base.html</li>
-        <li>Under the "block scripts" tag, add include "[name of your app package]/analytics.html"</li>
-        <li>
-            The include tag lets you use the entire contents of the analytics.html file where you wrote the tag. This
-            will either be a blank document, having no effect, or a document containing the tags to implement Google
-            Analytics.
+        <li>Add a new user with the email address you got from the previous steps. Grant Read & Analyze permissions
+          <strong><i>only</i></strong>. Wait
+          about 5 minutes before making requests through the app while these changes synchronize across Google's
+          services.
         </li>
-      </ul>
-  </ol>
-
+        <!--      <li>Create A New Property. Set the appropriate website name, URL, content category, time zone, etc. When you finish, you will get a "tracking-ID" in the format "UA-123456789-1". The 9 digits in the center are an identifier for your account and the "-1" corresponds to the number of the property you're tracking. Save this number for configuring your portal.</li>-->
+        <!--      <li>In your tethys portal, navigate to the file "../tethys/src/tethys_portal/settings.py". In that file, you will find a line about half way down that says GOOGLE_ANALYTICS_JS_PROPERTY_ID = ''. Inside the single quotes, add your Tracking ID from the previous step. Save.'</li>-->
+      </ol>
+      <h3>Security Warnings</h3>
+      <p>If you modify this app and use GitHub to track your changes, you need to exclude the Google Analytics API
+        key from your commits for security reasons. If you forget, you should immediately return to <a
+                target="_blank" href="console.developers.google.com">console.developers.google.com</a> and
+        deauthorize
+        that key. Follow the instructions below to set up a new analytics reporting service account
+        and generate a new key. If you followed these instructions, the key should only be valid for queries,
+        not
+        modifications of your Google account so your account will remain safe but you will leak personal
+        information.</p>
+      <p>By using this app and creating Google Analytics accounts, you will agree to the responsible use of the
+        information gathered about your users. You should follow any applicable best practices to ensure this
+        information is not made publicly available or misused.</p>
+    </div>
+  </div>
+</div>
 {% endblock %}

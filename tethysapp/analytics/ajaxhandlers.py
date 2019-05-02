@@ -35,22 +35,10 @@ def requester(request):
 
 
 @login_required()
-def appstats(request):
+def appstats(name):
     """
     controller for getting stats on the individual app pages.
-    1. it takes the url of the page its on, divides it up, and takes the 2nd to last entry (which contains the name of
-        the app). It then finds which app in the applist that corresponds to and keeps that value.
-    2. declaration of a dictionary of metrics and values to be filled and shown on the individual app pages
-    3. Query analytics based on the specified list, filter the results based on the page path using the name from step
-        1, fill the data dictionary, and return it as a json response.
     """
-    url = ast.literal_eval(request.body.decode('UTF-8'))['url']
-    substring = url.split('/')
-    apps = applist()
-    for app in apps:
-        if substring[len(substring) - 2] in apps[app]:
-            name = substring[len(substring) - 2]
-
     data = {
         'users': 0,
         'sessions': 0,
@@ -64,5 +52,51 @@ def appstats(request):
             data['users'] += float(results[i]['metrics'][0]['values'][0])
             data['sessions'] += float(results[i]['metrics'][0]['values'][1])
             data['avgSessionDuration'] += float(results[i]['metrics'][0]['values'][2])/60
+
+    print(data)
+
+    return data
+
+
+@login_required()
+def apptchart(name):
+    """
+    A controller for getting the timeseries chart of an individual app's usage
+    """
+
+    import pprint
+    timeusers = ['filler information to see if the highchart div gets read correctly']
+    data = {}
+
+    results = GAstats(['ga:users', 'ga:date', 'ga:pagePath'])
+    results = results.get('reports', [])[0]['data']['rows']
+    pprint.pprint(results)
+    # for entry in results:
+    #     timeusers.append([entry['dimensions'][0], entry['metrics'][0]['values'][0]])
+    data['timeusers'] = timeusers
+
+    return data
+
+
+@login_required()
+def app_page(request):
+    """
+    The controller that gets called when you open a stats view page for an app
+    1. it takes the url of the page its on, divides it up, and takes the 2nd to last entry (which contains the name of
+        the app). It then finds which app in the applist that corresponds to and keeps that value.
+    2. Calls the functions for getting stats on various parts of the page
+    3. Query analytics based on the specified list, filter the results based on the page path using the name from step
+        1, fill the data dictionary, and return it as a json response.
+    """
+    url = ast.literal_eval(request.body.decode('UTF-8'))['url']
+    substring = url.split('/')
+    apps = applist()
+    name = ''
+    for app in apps:
+        if substring[len(substring) - 2] in apps[app]:
+            name = substring[len(substring) - 2]
+
+    appstats(name)
+    data.update(apptchart(name))
 
     return JsonResponse(data)
